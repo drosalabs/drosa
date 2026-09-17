@@ -29,6 +29,19 @@ Last updated: 2026-09-17 by drosa-01-ds
   DSP inventory, power scoping, RX 6900 XT training stack), the audit governs.
 - Toolchain: Rust pinned through `rust-toolchain.toml` and oxalica
   rust-overlay in `flake.nix`; no host-global Rust toolchain is used.
+  Verified end to end 2026-09-17 on rustc 1.94.0: `nix flake check`,
+  `cargo build`, `cargo test`, `cargo fmt --check`, and `cargo clippy`
+  all pass on the 0.1.0 stub crate.
+- Documentation set of record landed 2026-09-17: `README.md` (vision,
+  design principles, etymology, budget and precision summaries),
+  `docs/architecture/connectome-specification.md` (four subsystems with
+  evidence classes and reference ledger),
+  `docs/architecture/hardware-mapping.md` (BRAM ledger, quantization and
+  drift arithmetic, LUT/DSP inventory, verification gates, risk register),
+  `docs/vision/2d-3d-webgpu-visualizer.md` (architecture decision, scene
+  layers, interaction model, milestones). The 181 KB figure is used as a
+  conservative envelope over the audited 124 to 165 KB line-item totals,
+  and the two numbers are always stated together.
 
 ## 2. QUEUE
 
