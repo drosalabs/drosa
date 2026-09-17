@@ -1,0 +1,13 @@
+[package]
+name = "drosa"
+version = "0.1.0"
+edition = "2024"
+description = "Drosophila-inspired neuromorphic physical AI runtime: float-free, backprop-free, DRAM-free"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/drosa-ai/drosa"
+homepage = "https://drosa.ai"
+readme = "README.md"
+keywords = ["neuromorphic", "connectome", "fixed-point", "fpga", "robotics"]
+categories = ["algorithms", "embedded", "science", "no-std"]
+
+[dependencies]
