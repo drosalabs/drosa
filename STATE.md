@@ -1,6 +1,6 @@
 # STATE
 
-Last updated: 2026-09-17 by drosa-01-ds
+Last updated: 2026-09-17 by drosa-02-ds
 
 ## 1. STATE
 
@@ -42,6 +42,18 @@ Last updated: 2026-09-17 by drosa-01-ds
   layers, interaction model, milestones). The 181 KB figure is used as a
   conservative envelope over the audited 124 to 165 KB line-item totals,
   and the two numbers are always stated together.
+- Public 0.1.0 crate foundation landed 2026-09-17: `Cargo.toml` carries the
+  crates.io metadata with an include whitelist (`src/**/*`, `Cargo.toml`,
+  `README.md`, `LICENSE`) that excludes `docs/` from the packaged tarball;
+  `LICENSE` holds the MIT and Apache-2.0 texts. `src/lib.rs` exposes the
+  `no_std` population constants (50 AL PNs, 2,000 KCs, 5 percent APL
+  sparsity target, 16 EB ring columns, 1,300 DNs), the Neuromodulator,
+  Valence, and CircuitModule enums, and the HeadingQ8, AngleQ16, and
+  SynapticWeightQ16 fixed-point types (INT16 Q8.8 master with INT8
+  inference-byte reads, per the hardware mapping). Verified: 24 unit tests,
+  clippy, fmt, and `cargo package --list` free of `docs/` on rustc 1.94.0.
+  The crates.io publish itself remains open under the drosa-01-ds queue
+  item.
 
 ## 2. QUEUE
 

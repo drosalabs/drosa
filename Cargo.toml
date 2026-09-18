@@ -2,12 +2,19 @@
 name = "drosa"
 version = "0.1.0"
 edition = "2024"
-description = "Drosophila-inspired neuromorphic physical AI runtime: float-free, backprop-free, DRAM-free"
+authors = ["Andy Zhang <contact@drosa.org>"]
+description = "Physical AI Drosophila connectome and biological motor simulation engine"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/drosa-ai/drosa"
-homepage = "https://drosa.ai"
+repository = "https://github.com/drosalabs/drosa"
+homepage = "https://drosa.org"
 readme = "README.md"
-keywords = ["neuromorphic", "connectome", "fixed-point", "fpga", "robotics"]
-categories = ["algorithms", "embedded", "science", "no-std"]
+keywords = ["drosophila", "connectome", "neuromorphic", "robotics", "simulation"]
+categories = ["science", "simulation", "embedded"]
+include = [
+    "src/**/*",
+    "Cargo.toml",
+    "README.md",
+    "LICENSE",
+]
 
 [dependencies]
