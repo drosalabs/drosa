@@ -1,6 +1,6 @@
 # STATE
 
-Last updated: 2026-09-18 by drosa-03-ds
+Last updated: 2026-09-18 by drosa-04-ds
 
 ## 1. STATE
 
@@ -52,8 +52,7 @@ Last updated: 2026-09-18 by drosa-03-ds
   SynapticWeightQ16 fixed-point types (INT16 Q8.8 master with INT8
   inference-byte reads, per the hardware mapping). Verified: 24 unit tests,
   clippy, fmt, and `cargo package --list` free of `docs/` on rustc 1.94.0.
-  The crates.io publish itself remains open under the drosa-01-ds queue
-  item.
+  The publish later landed; see the external presence entry below.
 - Packaging whitelist corrected 2026-09-18 by drosa-03-ds: the original
   unanchored include patterns (`Cargo.toml`, `README.md`, `LICENSE`) follow
   gitignore any-depth matching and swept 95 files from the gitignored
@@ -64,21 +63,55 @@ Last updated: 2026-09-18 by drosa-03-ds
   `Cargo.toml`, `Cargo.toml.orig`, `Cargo.lock`, `.cargo_vcs_info.json`,
   `README.md`, `LICENSE`. `include` was already under `[package]`; table
   placement was not the cause.
+- External presence verified 2026-09-18 by drosa-04-ds (read-only probes,
+  same day): crates.io `drosa` 0.1.0 is live (created 2026-09-19T00:12:35Z,
+  MIT OR Apache-2.0, homepage `https://drosa.org`, repository
+  `github.com/drosalabs/drosa`), closing the publish half of the drosa-01-ds
+  stub item; GitHub organization `drosalabs` exists (created
+  2026-09-18T00:28:53Z, no public repositories yet, so the crate's declared
+  repository URL is not yet backed by a visible repo); `drosa.org` resolves
+  to parking A records 207.207.210.107 and .229 with no HTTPS listener;
+  Hugging Face organization `drosalabs` page is live and
+  `huggingface.co/spaces/drosalabs/connectome-3d` returns 401 to anonymous
+  requests, consistent with a private Space. The org handle landed as
+  `drosalabs`, superseding the `drosa-ai` handle predicted at planning time.
+- Visualizer implementation architecture landed 2026-09-18 by drosa-04-ds:
+  `docs/vision/webgpu-interactive-visualizer-architecture.md` is the
+  implementation architecture of record for the browser deployment (direct
+  WebGPU stack decision with a sub-100 ms load budget, dual-loop 1 kHz
+  motor / 500 Hz policy timing decoupled from the 60 to 120 Hz render loop,
+  three WGSL derivation kernels over engine-exported fixed-point state, a
+  mesh decimation and quantization pipeline budgeted at 4.5 MB against the
+  5 MB ceiling, a transferable-buffer WASM to WebGPU bridge that needs no
+  cross-origin isolation, the static Space scaffold and CI workflow for
+  `drosalabs/connectome-3d`, the `drosa.org` GitHub Pages embed plan, and
+  gates S1 to S5). It extends and does not amend the decision of record in
+  `docs/vision/2d-3d-webgpu-visualizer.md`: dynamics stay in the Rust core,
+  WGSL derives render state only.
 
 ## 2. QUEUE
 
-- [ ] [owner:Andy] [P1] Register core domains `drosa.ai` and `drosa.io`
-  (registrar confirmation supersedes the audit's no-resolution observation;
-  `drosa.dev` as an optional third).
-- [ ] [owner:Andy] [P1] Claim GitHub organization `drosa-ai` and repository
-  `zh4ngx/drosa` (the bare `github.com/drosa` user is dormant, so the
-  organization handle must be suffixed; the repository itself is named
-  exactly `drosa`).
-- [ ] [owner:Andy] [P2] Claim Hugging Face organization `drosa-ai`.
-- [ ] [owner:drosa-01-ds] [P1] Scaffold and publish minimal 0.1.0 stubs on
-  crates.io, PyPI, and npm. Both crates.io and PyPI prohibit name squatting:
-  each publish needs a real first artifact (README plus a minimal API
-  surface), and LICENSE files (MIT OR Apache-2.0) land in the same change.
+- [ ] [owner:Andy] [P1] Register the remaining core domains `drosa.ai` and
+  `drosa.io` (`drosa.org` is registered and parked 2026-09-18, parking A
+  records, no HTTPS listener; `drosa.dev` as an optional third).
+- [ ] [owner:Andy] [P1] Push the repository to `github.com/drosalabs/drosa`
+  and set branch protection on `main` (organization `drosalabs` claimed
+  2026-09-18; the crate metadata already declares this URL but no repository
+  is publicly visible yet).
+- [x] [owner:Andy] [P2] Claim the Hugging Face organization (landed as
+  `drosalabs`, org page verified 2026-09-18).
+- [ ] [owner:Andy] [P1] Set launch visibility for the private Space
+  `drosalabs/connectome-3d` (returns 401 to anonymous requests,
+  2026-09-18) and reserve the model and dataset namespaces for exported
+  frozen-weight blobs and manifests.
+- [ ] [owner:Andy] [P1] Stand up the `drosa.org` landing site: Pages
+  repository under `drosalabs` with `CNAME drosa.org`, DNS re-pointed from
+  the parking records, embedding the Space per section 6.5 of
+  `docs/vision/webgpu-interactive-visualizer-architecture.md`.
+- [ ] [owner:drosa-01-ds] [P1] Publish minimal stubs on PyPI and npm with
+  the same no-squatting bar as crates.io (README plus a minimal API surface,
+  LICENSE files in the same change). The crates.io 0.1.0 stub landed and is
+  verified live as of 2026-09-18.
 - [ ] [owner:drosa-01-ds] [P1] Implement the Phase 1 Rust CPU fixed-point
   reference: `no_std`-friendly core, `I8F8`/`I4F12`-style fixed-point
   arithmetic, zero heap allocation in the control loop, seeded and persisted
@@ -88,17 +121,20 @@ Last updated: 2026-09-18 by drosa-03-ds
   rollouts on the RX 6900 XT inside the fleet `training.slice` standard.
   Exit gates G2.1 through G2.4.
 - [ ] [owner:drosa-01-ds] [P2] Build the interactive 2D/3D WebGPU synaptic
-  visualizer per `docs/vision/2d-3d-webgpu-visualizer.md`.
+  visualizer per `docs/vision/2d-3d-webgpu-visualizer.md` and the
+  implementation architecture in
+  `docs/vision/webgpu-interactive-visualizer-architecture.md` (deploy
+  target: Space `drosalabs/connectome-3d`, embedded at `drosa.org`).
 
 ## 3. WAITS
 
-- [ ] [waiting:core domains registered] Point the README homepage and Cargo
-  metadata at live `drosa.ai`/`drosa.io` URLs; re-run the naming audit's DNS
-  probes to confirm resolution.
-- [ ] [waiting:GitHub organization claimed] Add the org remote, push the
-  repository, set branch protection on `main`.
-- [ ] [waiting:Hugging Face organization claimed] Reserve the namespace for
-  exported frozen-weight blobs and manifests.
+- [ ] [waiting:drosa.ai and drosa.io registered] Point the README and Cargo
+  metadata at the full domain set and re-run the naming audit's DNS probes
+  to confirm resolution (`drosa.org` is registered, already the crate
+  homepage, and parked rather than serving).
+- [ ] [waiting:drosa.org DNS re-pointed to Pages] Flip the landing embed
+  from the parking placeholder to the live Pages site; verify HTTPS issue
+  and the Space iframe per gate S4.
 - [ ] [waiting:FPGA boards in hand] Phase 3 RTL exit gates G3.1 through G3.5
   require an Artix-7 XC7A100T board and an AMD Kria K26 or KV260.
 - [ ] [waiting:trademark clearance in Nice classes 9 and 42] Required before
