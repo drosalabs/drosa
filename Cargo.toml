@@ -12,9 +12,9 @@ keywords = ["drosophila", "connectome", "neuromorphic", "robotics", "simulation"
 categories = ["science", "simulation", "embedded"]
 include = [
     "src/**/*",
-    "Cargo.toml",
-    "README.md",
-    "LICENSE",
+    "/Cargo.toml",
+    "/README.md",
+    "/LICENSE",
 ]
 
 [dependencies]
