@@ -91,7 +91,7 @@ Four subsystems, each documented in depth in
 |---|---|---|
 | Sensory expansion | ~50 projection-neuron classes diverge into ~2,000 Kenyon cells per hemisphere; APL feedback inhibition holds activity near 5% | Binary sparse random projection (a locality-sensitive hash), LUT adder trees, zero multipliers |
 | Central Complex ring attractor | 16-wedge ellipsoid-body compass bump persists in darkness; P-EN neurons integrate angular velocity; fan-shaped body maintains home vector; PFL3 neurons steer toward goals | INT32 phase accumulator (drift-free by construction) with the recurrent bump kept as a simulation reference; exact-rotation fixed-point kernels |
-| Three-factor plasticity | Dopamine-gated heterosynaptic depression at KC to MBON synapses, experimentally shown to not require postsynaptic spiking (Hige et al., Neuron 2015) | Per-KC INT16 eligibility traces times compartment teacher signals, gated integer addition into an INT16 Q8.8 master weight |
+| Three-factor plasticity | Dopamine-gated heterosynaptic depression at KC to MBON synapses, experimentally shown to not require postsynaptic spiking (Hige et al., Neuron 2015) | Per-KC 16-bit eligibility times compartment teacher pulses, rounded and clamped updates into INT16 Q8.8 master weights |
 | Motor convergence | ~1,300 descending neurons funnel all brain output through the neck connective (~100:1 compression) onto thoracic CPGs | Fixed-priority arbitration onto scalar v and omega command registers; phase-accumulator CPG ROM |
 
 ## Design principles
@@ -154,8 +154,24 @@ Full derivation, part-by-part utilization, and the DDR-free argument:
 | W_out inference read | INT8 (upper byte of master) | readout noise sits below behavioral threshold |
 | W_out master accumulator | INT16 Q8.8 | updates below one INT8 LSB accumulate instead of rounding to zero forever (the quantization stall) |
 | Heading state | INT32 phase accumulator (primary), INT16 Q1.15 pair (reference) | INT8 state drifts ~4 radians per 10 minutes of darkness; INT16 bounds drift to ~2 degrees; the accumulator adds zero storage drift |
-| Eligibility traces, teacher traces | INT16 Q8.8 | trace lifetime spans seconds at a 500 Hz tick |
+| Eligibility and teacher pulses | 16-bit unsigned Q1.15 eligibility; signed Q7 teacher pulses | bounded replacement tags preserve seconds-scale credit; consumed teacher pulses prevent backward leakage |
 | CPG joint trajectories | INT8 ROM | periodic waveforms indexed by phase |
+
+## Local plasticity reference
+
+`drosa::plasticity::Plasticity<K, M>` implements a fixed-array, allocation-free
+CPU reference. Each policy tick evaluates sparse KC input, updates per-KC
+eligibility, and applies compartment-routed dopamine pulses to INT16 master
+weights. Sub-master updates use seeded stochastic rounding; runtime weights
+remain the signed upper byte. The implementation includes acquisition,
+explicit omission-teacher extinction, causal timing, and quantization tests.
+These tests establish arithmetic behavior, not the full conditioning gates.
+
+The [three-factor plasticity and CubeCL learning specification](docs/architecture/3-factor-plasticity-and-cubecl-learning.md)
+derives the biology and arithmetic, proves the conditional 4 KiB trace
+budget, and specifies packed device kernels, allocation sealing, WIT types,
+and visualizer integration. CubeCL execution and browser parity remain
+unimplemented. The default crate stays dependency-free and `no_std`.
 
 ## Execution roadmap
 
@@ -236,6 +252,7 @@ lives in
 |---|---|
 | [docs/architecture/connectome-specification.md](docs/architecture/connectome-specification.md) | Sensory expansion, ring attractor dynamics, three-factor plasticity, motor convergence; equations, parameters, evidence classes, references |
 | [docs/architecture/hardware-mapping.md](docs/architecture/hardware-mapping.md) | Kria K26 / Artix-7 mapping, BRAM ledger, quantization-stall and drift arithmetic, LUT/DSP inventory, latency and power, verification gates |
+| [docs/architecture/3-factor-plasticity-and-cubecl-learning.md](docs/architecture/3-factor-plasticity-and-cubecl-learning.md) | Heterosynaptic biology, tested fixed-point local learning, factorized eligibility, CubeCL kernel and allocation contracts, WIT and visualizer integration |
 | [docs/vision/2d-3d-webgpu-visualizer.md](docs/vision/2d-3d-webgpu-visualizer.md) | Browser visualizer: architecture decision, scene layers, interaction model, performance budget |
 
 ## License
