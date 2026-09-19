@@ -349,6 +349,14 @@ partial observation. Two rules from the audit attach to it:
 
 ## 4. Mushroom Body: three-factor plasticity without backpropagation
 
+Implementation refinement (2026-09-19):
+[Three-factor plasticity and CubeCL learning](3-factor-plasticity-and-cubecl-learning.md)
+specifies the executable CPU variant and the proposed device contract.
+It uses bounded unsigned Q15 replacement eligibility and consumed Q7
+teacher pulses instead of the accumulating Q8.8 trace sketch below.
+The 4 KiB vector budget is unchanged. Behavioral conditioning gates remain
+open; synthetic arithmetic tests do not close them.
+
 ### 4.1 Biological substrate (A)
 
 Kenyon cells converge onto 21 MBON output classes in compartments, each
@@ -405,22 +413,28 @@ The eligibility of synapse $(i, j)$ therefore factorizes:
 
 $$\operatorname{elig}(i, j) = \operatorname{trace}(x_j) \cdot \operatorname{route}(i)$$
 
-and the storage is 2,048 per-KC INT16 traces (4,096 B) plus tens of bytes
-of per-compartment teacher state. A full 21 x 2,048 eligibility matrix (84
-KB) would correspond to a postsynaptically gated rule variant that the key
-fly experiment rules out for this synapse class [P2]. The earlier Drosa
-hardware draft allocated that 84 KB; the audited ledger corrects it, and
-the optional policy-gradient actor head (section 4.5), which genuinely
-needs per-action traces, costs 8 x 2,048 x INT16 = 32 KB, not 84 KB.
+and the storage is 2,048 per-KC 16-bit traces (4,096 B) plus compartment
+teacher state. This sharing requires identical presynaptic trace dynamics
+across output rows. Hige [P2] excludes a mandatory postsynaptic spike factor
+in the studied LTD, but does not rule out compartment-specific or
+synapse-specific biochemical eligibility. A full 21 x 2,048 trace matrix
+costs 86,016 B (84 KiB); the reduced model needs only 4 KiB. The earlier
+hardware draft allocated the redundant matrix. The optional policy-gradient
+actor head (section 4.5) genuinely needs per-action traces and costs
+8 x 2,048 x 2 = 32 KiB. The complete conditional sharing proof is in the
+[local-learning specification](3-factor-plasticity-and-cubecl-learning.md#3-eligibility-trace-factorization).
 
 ### 4.4 Relation to policy gradients: why this is not backpropagation
 
-For a single linear readout $y_i = \sum_j W_{ij} z_j$ under reward $R$, the
-REINFORCE update is
-$\Delta W_{ij} = \eta\, R\, (y_i - \bar y)\, x_j$ and the three-factor
-Hebbian form is $\Delta W_{ij} = \eta\, R\, y_i\, x_j$: in one layer the
-score derivative $\partial y_i / \partial W_{ij}$ is literally the input
-activation $x_j$, so computing a gradient requires no backward pass.
+For a linear readout $y_i = \sum_j W_{ij} x_j$, the derivative
+$\partial y_i / \partial W_{ij} = x_j$ needs no backward chain through the
+frozen expansion. This is not itself a policy-gradient estimator. For a
+categorical policy $\pi = \operatorname{softmax}(y)$, sampled action $a$,
+and action-independent baseline $b$, REINFORCE instead uses
+$\Delta W_{ij} = \eta (R-b) x_j [\mathbf{1}(i=a)-\pi_i]$.
+The sampled-action and probability terms are absent from Drosa's baseline
+heterosynaptic depression rule. The optional actor head below is a distinct
+model, not an equivalent explanation of dopamine-gated depression.
 
 What backpropagation would demand, and Drosa never pays for:
 
@@ -477,11 +491,13 @@ is bound to these gates, not to a demonstration.
 The readout stores an INT16 Q8.8 master per synapse and serves inference
 from its upper byte. An update smaller than one inference LSB accumulates
 in the master instead of rounding to zero forever; with per-event master
-updates of 32 to 64 LSB, the inference byte moves every 4 to 8 reinforced
-events per synapse, while ~102 co-active KCs shift the MBON sum measurably
-on the first reinforced event. The design rule is: choose $\eta$ against
-the master LSB, never the inference LSB. Full arithmetic in the hardware
-mapping document.
+updates of 32 to 64 LSB, an inference-byte boundary is crossed within 4 to
+8 reinforced events per unclipped synapse. A first-event output change
+depends on the fractional weight phases, not population size alone.
+Updates below one master LSB need stochastic rounding or additional residual
+state. The implemented reference uses event-keyed stochastic rounding;
+its complete arithmetic is in the
+[local-learning specification](3-factor-plasticity-and-cubecl-learning.md).
 
 ---
 
@@ -541,7 +557,7 @@ the biological bottleneck:
 | Kenyon cells K | 2,048 | B, from ~2,000 per hemisphere (A) |
 | Claws per KC | 6 | A |
 | Active fraction rho | 5% (~102 cells) | A |
-| MBON compartments M | 21 | A [H12] |
+| MBON output rows M | 21 | B reduction anchored to 21 MBON types; the Aso scheme has 15 lobe compartments (A) [H12] |
 | EB wedges / PB glomeruli / FB columns | 16 / 18 / 8 | A [C4] |
 | Descending neurons | ~1,300 (1,314 counted) | A [H3, H4] |
 | Policy tick | 100 to 500 Hz | B |

@@ -109,15 +109,21 @@ $y_i = \sum_{j : z_j = 1} W_{ij}$. With ~102 active KCs and 21 output rows,
 one policy tick performs ~2,100 conditional byte additions. No multiplier is
 instantiated anywhere in the Mushroom Body inference path.
 
-The learning update is teacher-gated addition on active rows only:
-102 x 21 conditional additions per teaching event, with events bounded at
-~10 Hz, a negligible load.
+The learning update uses all nonzero historical eligibility, not only the
+currently active KCs. Its worst case is 2,048 x 21 = 43,008 logical synapses
+per event, with events bounded at ~10 Hz by the caller. The 102 x 21 count
+applies only when the eligible set is as sparse as the current input. The
+[local-learning specification](3-factor-plasticity-and-cubecl-learning.md)
+defines exact integer updates and packed-word ownership for device execution.
 
 ## 6. Learning-path microarchitecture
 
-Per policy tick: decay the 2,048 INT16 KC eligibility traces
-($e_j \leftarrow \lambda e_j + z_j$; $\lambda$ from a 16-entry LUT, one
-multiply per KC or a shared shift-add), update compartment teacher traces.
+Per policy tick: decay 2,048 16-bit KC eligibility values and refresh active
+KC tags. The implemented local-learning variant uses unsigned Q1.15 bounded
+replacement tags and consumed signed Q7 teacher pulses, as specified in
+[the arithmetic contract](3-factor-plasticity-and-cubecl-learning.md#2-mathematical-formulation-and-fixed-point-arithmetic).
+This refines the original accumulating Q8.8 trace sketch without increasing
+trace-vector storage.
 Per teaching event: for each active row $i$ and each KC $j$ with nonzero
 trace, add $-\eta\,(d_c - d_{0,c})\, e_j$ into the INT16 Q8.8 master, then
 clamp to the box interval. Because the eligibility factorizes (per-KC trace
@@ -144,10 +150,12 @@ Arithmetic that pins the design rule:
 - One INT8 inference LSB spans exactly 256 master LSBs.
 - Per-event master updates of 32 to 64 LSB move the inference byte every 4
   to 8 reinforced events per synapse.
-- A population of ~102 co-active KCs shifts the MBON sum measurably on the
-  first reinforced event.
-- An $\eta$ 100x smaller still accumulates in the master where it would
-  round to zero in INT8 storage.
+- A first-event change in the INT8 MBON sum depends on fractional weight
+  phases and update size. Population size alone does not ensure that any
+  synapse crosses a runtime-byte boundary.
+- Updates below one master LSB need a further rounding mechanism. The CPU
+  reference uses event-keyed stochastic rounding without a residual matrix;
+  INT16 storage alone does not prevent sub-master quantization stalls.
 
 Choose $\eta$ against the master LSB, never the inference LSB. Gate G1.2
 catches a mis-tuned $\eta$.
@@ -186,8 +194,8 @@ functional advantage.
 | KC activations | binary | 256 B bitmap |
 | W_out inference read | INT8 (master upper byte) | derived, not stored twice |
 | W_out master | INT16 Q8.8 | 86,016 B BRAM |
-| KC eligibility traces | INT16 Q8.8 | 4,096 B BRAM |
-| Teacher traces and routing | INT16 / table | 64 B |
+| KC eligibility traces | unsigned Q1.15, 16 bits | 4,096 B BRAM |
+| Teacher pulses and routing | signed Q7 / static table | 64 B target, representation-dependent |
 | Heading state | INT32 phase accumulator | ~8 B (+ Q1.15 pair in reference build) |
 | Home vector, steering registers | INT16 fixed point | ~200 B total CX state |
 | CPG joint trajectories | INT8 ROM | ~1.9 KB with phase accumulators |

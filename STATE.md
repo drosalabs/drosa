@@ -1,6 +1,6 @@
 # STATE
 
-Last updated: 2026-09-18 by drosa-04-ds
+Last updated: 2026-09-19 by drosa-ds
 
 ## 1. STATE
 
@@ -89,8 +89,44 @@ Last updated: 2026-09-18 by drosa-04-ds
   `docs/vision/2d-3d-webgpu-visualizer.md`: dynamics stay in the Rust core,
   WGSL derives render state only.
 
+- Local-learning reference authored 2026-09-19 in `src/plasticity.rs`,
+  exported by `src/lib.rs`: fixed INT16 Q8.8 masters, 16-bit unsigned Q15
+  replacement eligibility, signed compartment pulses, and deterministic
+  event-keyed stochastic rounding. Bounded CPU verification passes 43 tests
+  (24 foundation and 19 plasticity, including 8,232 rational-oracle cases),
+  `cargo check --offline --lib`, clippy with warnings denied, and fmt on
+  Rust 1.94.0. Package listing contains eight files with no docs or cache
+  leakage. The service used one CPU equivalent, peaked at approximately
+  397 MiB under a 2 GiB cap, and completed in 3.496 s. Device kernels and
+  GPU parity are not implemented or measured.
+- Local-learning specification authored in
+  `docs/architecture/3-factor-plasticity-and-cubecl-learning.md`: biological
+  evidence and exclusions, exact overflow and factorization proofs, packed
+  CubeCL kernel contracts, allocation-sealing requirements, proposed WIT
+  types, and visualizer hooks. README and prior architecture links include
+  scoped corrections for row/compartment counts, historical eligibility
+  cost, and sub-master rounding. The inspected CubeCL revision requires
+  Rust 1.95 versus Drosa's 1.94 pin and contains allocating host dispatch
+  paths; dependency adoption and full-runtime sealing remain unverified.
+- Publication transport checked 2026-09-19: no git remote is configured;
+  `gh repo view drosalabs/drosa` reports no accessible repository
+  (re-probed at commit time). The Phase 2 change is verified (fmt, clippy
+  with warnings denied, 43 tests) and committed to local `main`; remote
+  push waits for Andy to create `drosalabs/drosa` on GitHub and configure
+  it as origin. No remote repository creation occurred.
+
 ## 2. QUEUE
 
+- [x] [owner:drosa-05-ds] [P1] Land the Phase 2 local-learning specification
+  in `docs/architecture/3-factor-plasticity-and-cubecl-learning.md`, the
+  `src/plasticity.rs` CPU reference and tests, its `src/lib.rs` export,
+  and documentation links and scoped corrections in `README.md`,
+  `docs/architecture/connectome-specification.md`, and
+  `docs/architecture/hardware-mapping.md`; verify, commit, and push `main`.
+  Landed 2026-09-19: fmt, clippy with warnings denied, and 43 tests pass on
+  the pinned toolchain; committed to local `main`. Push is deferred to the
+  owner:Andy remote item below because no origin is configured. The
+  remaining Phase 1 and Phase 2 implementation work stays with drosa-01-ds.
 - [ ] [owner:Andy] [P1] Register the remaining core domains `drosa.ai` and
   `drosa.io` (`drosa.org` is registered and parked 2026-09-18, parking A
   records, no HTTPS listener; `drosa.dev` as an optional third).

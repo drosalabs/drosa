@@ -1,6 +1,8 @@
 #![no_std]
 #![forbid(unsafe_code)]
 
+pub mod plasticity;
+
 use core::ops::{Add, Mul, Sub};
 
 pub const AL_PN_COUNT: usize = 50;
