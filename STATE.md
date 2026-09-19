@@ -1,6 +1,6 @@
 # STATE
 
-Last updated: 2026-09-17 by drosa-02-ds
+Last updated: 2026-09-18 by drosa-03-ds
 
 ## 1. STATE
 
@@ -43,8 +43,8 @@ Last updated: 2026-09-17 by drosa-02-ds
   conservative envelope over the audited 124 to 165 KB line-item totals,
   and the two numbers are always stated together.
 - Public 0.1.0 crate foundation landed 2026-09-17: `Cargo.toml` carries the
-  crates.io metadata with an include whitelist (`src/**/*`, `Cargo.toml`,
-  `README.md`, `LICENSE`) that excludes `docs/` from the packaged tarball;
+  crates.io metadata with an include whitelist (`src/**/*`, `/Cargo.toml`,
+  `/README.md`, `/LICENSE`) that excludes `docs/` from the packaged tarball;
   `LICENSE` holds the MIT and Apache-2.0 texts. `src/lib.rs` exposes the
   `no_std` population constants (50 AL PNs, 2,000 KCs, 5 percent APL
   sparsity target, 16 EB ring columns, 1,300 DNs), the Neuromodulator,
@@ -54,6 +54,16 @@ Last updated: 2026-09-17 by drosa-02-ds
   clippy, fmt, and `cargo package --list` free of `docs/` on rustc 1.94.0.
   The crates.io publish itself remains open under the drosa-01-ds queue
   item.
+- Packaging whitelist corrected 2026-09-18 by drosa-03-ds: the original
+  unanchored include patterns (`Cargo.toml`, `README.md`, `LICENSE`) follow
+  gitignore any-depth matching and swept 95 files from the gitignored
+  `.direnv/flake-inputs/` nixpkgs tree into `cargo package` (101 files,
+  357.0KiB; the `cargo publish` attempt failed at crates.io with a 400
+  unverified-email error before upload). Root-anchored patterns cut the
+  package to exactly 7 files (43.3KiB, 13.8KiB compressed): `src/lib.rs`,
+  `Cargo.toml`, `Cargo.toml.orig`, `Cargo.lock`, `.cargo_vcs_info.json`,
+  `README.md`, `LICENSE`. `include` was already under `[package]`; table
+  placement was not the cause.
 
 ## 2. QUEUE
 
