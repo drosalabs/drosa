@@ -1,6 +1,6 @@
 # STATE
 
-Last updated: 2026-09-19 by drosa-ds
+Last updated: 2026-09-21 by drosa-07-ds
 
 ## 1. STATE
 
@@ -114,6 +114,14 @@ Last updated: 2026-09-19 by drosa-ds
   with warnings denied, 43 tests) and committed to local `main`; remote
   push waits for Andy to create `drosalabs/drosa` on GitHub and configure
   it as origin. No remote repository creation occurred.
+- Publication transport landed 2026-09-21 by drosa-07-ds under a main-ag
+  dispatch: the GitHub repository `drosalabs/drosa` was created public
+  (`gh repo create drosalabs/drosa --public`), `origin` was configured as
+  `https://github.com/drosalabs/drosa.git`, and `main` was pushed with
+  upstream tracking at 49bff00, verified identical on both ends with a
+  clean working tree. The repository URL declared in the crates.io
+  metadata is now backed by a visible public repository. Branch protection
+  on `main` is not yet configured (open queue item).
 
 ## 2. QUEUE
 
@@ -130,10 +138,12 @@ Last updated: 2026-09-19 by drosa-ds
 - [ ] [owner:Andy] [P1] Register the remaining core domains `drosa.ai` and
   `drosa.io` (`drosa.org` is registered and parked 2026-09-18, parking A
   records, no HTTPS listener; `drosa.dev` as an optional third).
-- [ ] [owner:Andy] [P1] Push the repository to `github.com/drosalabs/drosa`
-  and set branch protection on `main` (organization `drosalabs` claimed
-  2026-09-18; the crate metadata already declares this URL but no repository
-  is publicly visible yet).
+- [x] [owner:Andy] [P1] Push the repository to `github.com/drosalabs/drosa`
+  (landed 2026-09-21 by drosa-07-ds under a main-ag dispatch: repository
+  created public, `origin` configured, `main` pushed at 49bff00).
+- [ ] [owner:Andy] [P1] Set branch protection on `main` in
+  `github.com/drosalabs/drosa` (organization `drosalabs` claimed
+  2026-09-18; the public repository landed 2026-09-21).
 - [x] [owner:Andy] [P2] Claim the Hugging Face organization (landed as
   `drosalabs`, org page verified 2026-09-18).
 - [ ] [owner:Andy] [P1] Set launch visibility for the private Space
