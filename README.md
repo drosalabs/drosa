@@ -254,6 +254,7 @@ lives in
 | [docs/architecture/hardware-mapping.md](docs/architecture/hardware-mapping.md) | Kria K26 / Artix-7 mapping, BRAM ledger, quantization-stall and drift arithmetic, LUT/DSP inventory, latency and power, verification gates |
 | [docs/architecture/3-factor-plasticity-and-cubecl-learning.md](docs/architecture/3-factor-plasticity-and-cubecl-learning.md) | Heterosynaptic biology, tested fixed-point local learning, factorized eligibility, CubeCL kernel and allocation contracts, WIT and visualizer integration |
 | [docs/vision/2d-3d-webgpu-visualizer.md](docs/vision/2d-3d-webgpu-visualizer.md) | Browser visualizer: architecture decision, scene layers, interaction model, performance budget |
+| [docs/research/2026-10-05-bird-mammal-pallial-convergence-and-drosa-motifs.md](docs/research/2026-10-05-bird-mammal-pallial-convergence-and-drosa-motifs.md) | Research study: grades the 2025 Science bird and mammal pallium studies at source; separates motifs that recur across independent lineages from replaceable insect anatomy; proposes five costed CPU-only checks |
 
 ## License
 
