@@ -214,11 +214,9 @@ resource-capped services.
 |-- Cargo.toml                       root crate manifest (0.1.0)
 |-- src/                             Rust implementation (Phase 1)
 `-- docs/
-    |-- architecture/
-    |   |-- connectome-specification.md   biological and computational spec
-    |   `-- hardware-mapping.md           BRAM ledger, precision bounds, RTL budget
-    `-- vision/
-        `-- 2d-3d-webgpu-visualizer.md    interactive visualizer architecture
+    `-- architecture/
+        |-- connectome-specification.md   biological and computational spec
+        `-- hardware-mapping.md           BRAM ledger, precision bounds, RTL budget
 ```
 
 ## Scientific provenance
@@ -249,11 +247,6 @@ lives in
 | [docs/architecture/connectome-specification.md](docs/architecture/connectome-specification.md) | Sensory expansion, ring attractor dynamics, three-factor plasticity, motor convergence; equations, parameters, evidence classes, references |
 | [docs/architecture/hardware-mapping.md](docs/architecture/hardware-mapping.md) | Kria K26 / Artix-7 mapping, BRAM ledger, quantization-stall and drift arithmetic, LUT/DSP inventory, latency and power, verification gates |
 | [docs/architecture/3-factor-plasticity-and-cubecl-learning.md](docs/architecture/3-factor-plasticity-and-cubecl-learning.md) | Heterosynaptic biology, tested fixed-point local learning, factorized eligibility, CubeCL kernel and allocation contracts, WIT and visualizer integration |
-| [docs/vision/2d-3d-webgpu-visualizer.md](docs/vision/2d-3d-webgpu-visualizer.md) | Browser visualizer: architecture decision, scene layers, interaction model, performance budget |
-| [docs/research/2026-10-05-bird-mammal-pallial-convergence-and-drosa-motifs.md](docs/research/2026-10-05-bird-mammal-pallial-convergence-and-drosa-motifs.md) | Research study: grades the 2025 Science bird and mammal pallium studies at source; separates motifs that recur across independent lineages from replaceable insect anatomy; proposes five costed CPU-only checks |
-| [docs/research/2026-10-06-check-e1-expansion-shape-sweep.md](docs/research/2026-10-06-check-e1-expansion-shape-sweep.md) | Executed check E1: sweep of claw count, Kenyon cell count, input width, and three inhibition models against dimension, association capacity, and the priced tick; finds the current expansion shape not cost-optimal and derives a cheaper admissible shape |
-| [docs/research/2026-10-08-trumbull-memory-not-stored-in-brain-study.md](docs/research/2026-10-08-trumbull-memory-not-stored-in-brain-study.md) | Research study: compares Victoria Trumbull's lecture "Memories are not stored in the brain" with Drosa's local learning, navigation design, and memory ledger; separates retained parameters and state from separately retrievable records of events |
-| [docs/research/2026-10-08-trumbull-memory-crosscheck-opus.md](docs/research/2026-10-08-trumbull-memory-crosscheck-opus.md) | Adversarial cross-check of the Trumbull study: verifies its caption citations; shows the plastic readout is a content-addressed store and the heading accumulator a static register; derives the 32-bit phase-word requirement, a bit-exact event-time variant of the eligibility trace, and why FPGA board power hides nanojoule-scale savings |
 
 ## License
 

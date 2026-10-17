@@ -2,7 +2,7 @@
 
 Date: 2026-09-17
 Status: Specification of record for the Drosa computational architecture
-Sources: audited research ledger in `~/main` (see section 9); every claim
+Sources: the internal audited research ledger (see section 9); every claim
 below is labeled with its evidence class and source index.
 
 ---
@@ -707,13 +707,10 @@ Descending control and hardware:
   provides a logic for associative learning*, eLife 3:e04577.
   https://elifesciences.org/articles/04577
 
-Internal engineering references (read-only):
+Internal engineering references (not published):
 
-- Hardware architecture and execution plan:
-  `~/main/docs/design/2026-09-16-drosophila-hardware-architecture-and-execution-plan.md`
-- Connectome and learning audit with hardware verification appendix:
-  `~/main/docs/research/2026-09-16-fruit-fly-connectome-and-biological-learning-audit.md`
-- Naming whitespace audit:
-  `~/main/docs/research/2026-09-17-drosophila-naming-whitespace-audit-glm.md`
-- Open-source and visualization vision:
-  `~/main/docs/vision/2026-09-16-drosophila-open-source-interactive-viz-and-profile.md`
+- Hardware architecture and execution plan (2026-09-16)
+- Connectome and learning audit with hardware verification appendix
+  (2026-09-16)
+- Naming whitespace audit (2026-09-17)
+- Open-source and visualization vision (2026-09-16)

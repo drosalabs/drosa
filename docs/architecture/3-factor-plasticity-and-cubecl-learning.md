@@ -939,6 +939,6 @@ Related Drosa documents:
 - [Hardware mapping](hardware-mapping.md): FPGA memory ledger and master
   weight contract. Eligibility-vector capacity is preserved; worst-case
   reinforcement cost includes all nonzero historical traces.
-- [Visualizer implementation architecture](../vision/webgpu-interactive-visualizer-architecture.md):
+- Visualizer implementation architecture (internal document):
   authoritative dynamics/rendering separation, pooled snapshot transport,
   and browser deployment model.

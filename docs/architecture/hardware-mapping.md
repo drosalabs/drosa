@@ -3,7 +3,7 @@
 Date: 2026-09-17
 Status: Specification of record for the FPGA mapping of Drosa
 Sources: hardware verification appendix (section 15) of the audited research
-ledger in `~/main`; vendor datasheets [H10], [H11]; every latency, power, and
+ledger (internal); vendor datasheets [H10], [H11]; every latency, power, and
 utilization figure below is a calculation from stated parameters, to be
 replaced by measurement at the Phase 3 gates.
 
