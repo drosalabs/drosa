@@ -11,11 +11,10 @@ that runs in 124 to 165 KB of on-chip FPGA block RAM (inside a 181 KB
 conservative envelope), with no floating-point arithmetic, no
 backpropagation, and no external DRAM anywhere in the control path.
 
-The name and the numerical claims are audited. Every quantitative statement
-in this repository traces to the research ledger in `~/main` (see
-[Scientific provenance](#scientific-provenance)), where connectome
-provenance, learning-rule evidence, and hardware arithmetic were checked
-against primary literature and vendor datasheets.
+The name and the numerical claims are audited. Connectome provenance,
+learning-rule evidence, and hardware arithmetic were checked against primary
+literature and vendor datasheets; the architecture documents carry the
+citations (see [Scientific provenance](#scientific-provenance)).
 
 ## Etymology
 
@@ -203,16 +202,13 @@ cargo fmt --check && cargo clippy && cargo test
 
 The flake uses oxalica/rust-overlay with `fromRustupToolchainFile`, so the
 devShell and any future Nix package build consume the same pinned compiler;
-raw `pkgs.rustc` is never used. GPU work in Phase 2 runs under the fleet's
-bounded `training.slice` service standard with a pre-flight resource
-estimate, per the fleet GPU compute boundaries.
+raw `pkgs.rustc` is never used. GPU work in Phase 2 runs as bounded,
+resource-capped services.
 
 ## Project layout
 
 ```text
 .
-|-- AGENTS.md                        workspace operating rules for every seat
-|-- STATE.md                         live operational state, queue, waits
 |-- flake.nix                        pinned toolchain via oxalica/rust-overlay
 |-- rust-toolchain.toml              single source of truth for the compiler pin
 |-- Cargo.toml                       root crate manifest (0.1.0)
@@ -261,5 +257,4 @@ lives in
 
 ## License
 
-MIT OR Apache-2.0. License texts land with the first registry publication
-(see the queue in `STATE.md`).
+MIT OR Apache-2.0. The full texts of both licenses are in [LICENSE](LICENSE).
