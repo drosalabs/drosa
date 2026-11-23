@@ -1,14 +1,20 @@
 # Drosa
 
+**Status:** Drosa is early. The Rust reference implementation covers the
+learning rule; the expansion layer is currently implemented in the E1 sweep
+harness under `tests/`, not yet in the library. The hardware controller
+described below is a design, with small embedded hardware such as FPGAs and
+low-power accelerators as intended targets, not built yet.
+
 Drosa is an open-source neuromorphic physical AI architecture that maps the
 sensory, navigation, and learning circuits of the fruit fly connectome onto
 digital silicon. An adult *Drosophila melanogaster* executes agile 3D
 aerobatics, spatial navigation, vector path integration, and one-shot
 associative learning with roughly 100,000 to 140,000 neurons on under one
 milliwatt of metabolic power. Drosa asks what the smallest faithful digital
-rendering of that budget looks like, and answers with a complete controller
-that runs in 124 to 165 KB of on-chip FPGA block RAM (inside a 181 KB
-conservative envelope), with no floating-point arithmetic, no
+rendering of that budget looks like, and its design targets a complete
+controller that fits in 124 to 165 KB of on-chip FPGA block RAM (inside a
+181 KB conservative envelope), with no floating-point arithmetic, no
 backpropagation, and no external DRAM anywhere in the control path.
 
 The name and the numerical claims are audited. Connectome provenance,
@@ -37,8 +43,8 @@ single sparse associative readout that revalues sensory cues in one to five
 reinforced trials. Drosa separates the architecture along exactly that line:
 
 1. **The frozen backbone.** Sensory expansion, Central Complex heading and
-   vector integration, and motor pattern generators are pre-trained once in
-   physics simulation under heavy domain randomization, then frozen into
+   vector integration, and motor pattern generators are to be pre-trained once
+   in physics simulation under heavy domain randomization, then frozen into
    ROM images and fixed logic.
 2. **The plastic readout.** The Mushroom Body Kenyon cell to output neuron
    synapses form one wide, sparse linear layer. It learns online, in place,
@@ -124,7 +130,7 @@ Four subsystems, each documented in depth in
   signal bandwidth.
 - **Determinism as a feature.** Same inputs, same seed, same outputs, on
   every target: CPU reference, GPU kernels, and FPGA bitstream must agree
-  within the published quantization spec, verified bit-exact through the
+  within the published quantization spec, to be verified bit-exact through the
   export manifest.
 
 ## On-chip memory budget (summary)
@@ -202,7 +208,7 @@ cargo fmt --check && cargo clippy && cargo test
 
 The flake uses oxalica/rust-overlay with `fromRustupToolchainFile`, so the
 devShell and any future Nix package build consume the same pinned compiler;
-raw `pkgs.rustc` is never used. GPU work in Phase 2 runs as bounded,
+raw `pkgs.rustc` is never used. GPU work in Phase 2 will run as bounded,
 resource-capped services.
 
 ## Project layout
